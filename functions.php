@@ -18,4 +18,12 @@ function read_csv($filename){
   }
   fclose($csv_file);
 }
+
+function validate_file($filename){
+  $info = pathinfo($filename);
+  if (!$filename) die("No --file option provided, use --help for details\n");
+  elseif ($info["extension"] != "csv") die("Provided file must be of type CSV.\n");
+  elseif (!file_exists($filename)) die("File $filename not found.\n");
+  else return true; //file valid if script not killed in above tests
+}
 ?>

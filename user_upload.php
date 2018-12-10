@@ -12,5 +12,5 @@ if (array_key_exists('help',$options)) {
 }elseif (array_key_exists('create_table',$options)) {
   die("create table\n");
 }
-if ($file) read_csv($file);
+if (validate_file($file)) read_csv($file);
 ?>
