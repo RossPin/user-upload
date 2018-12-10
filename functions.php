@@ -1,4 +1,5 @@
 <?php
+require 'DB.php';
 function help(){
   echo "\nuser_upload.php can be used with the following options\n\n";
   echo "• --file [csv file name] – this is the name of the CSV to be parsed\n";
