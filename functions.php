@@ -14,16 +14,15 @@ function read_csv($filename){
   $csv_file = fopen($filename, "r");
   $keys = fgetcsv($csv_file );
   $keys = validate_csv_columns($keys);
-  $data = [];
+  $users = [];
   while ($row = fgetcsv($csv_file )) {
     foreach($keys as $i=>$key) {
       $user[$key] = $row[$i];
     }
-    array_push($data, $user);
+    array_push($users, $user);
   }
-  fclose($csv_file);
-  var_dump($data);
-  return $data;
+  fclose($csv_file);  
+  return $users;
 }
 
 function validate_file($filename){
@@ -40,5 +39,21 @@ function validate_csv_columns($keys){
   }
   if (in_array('name', $keys) && in_array('surname', $keys) && in_array('email', $keys)) return $keys;
   else die("CSV must contain 'name', 'surname' and 'email' columns.\n");
+}
+
+function format_names($users){
+  foreach($users as $i=>$user){
+    $users[$i]['name'] = format_name($user['name']);
+    $users[$i]['surname'] = format_name($user['surname']);
+  }
+  return $users;
+}
+
+function format_name($name){
+  $name = preg_replace("/[^\w']+/", "", strtolower($name)); //set to lowercase and remove non alpa characters except '
+  $name = trim(str_replace("'", " ", $name)); // swap ' for space to teat as seperate words
+  $name = ucwords($name); //capitalise words
+  $name = str_replace(" ", "'", $name); // swap space back for '
+  return $name;
 }
 ?>
