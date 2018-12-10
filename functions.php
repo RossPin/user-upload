@@ -9,4 +9,13 @@ function help(){
   echo "• -h – MySQL host\n";
   die("\n");
 }
+
+function read_csv($filename){
+  $csv_file = fopen($filename, "r");
+  $keys = fgetcsv($csv_file );
+  while ($row = fgetcsv($csv_file )) {
+      echo "$row[0], $row[1], $row[2]\n";
+  }
+  fclose($csv_file);
+}
 ?>
