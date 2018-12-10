@@ -10,7 +10,11 @@ $dry_run = array_key_exists('dry_run',$options);
 if (array_key_exists('help',$options)) {
   help();
 }elseif (array_key_exists('create_table',$options)) {
-  die("create table\n");
+  if ($host && $username) $conn = connect($host, $username, $password);
+  else die("\nHost and Username must be set with -h -u. see --help for details.\n");
+  create_table($conn);
+  $conn->close();
+  die("Exiting\n");
 }
 if (validate_file($file)) $users = read_csv($file);
 $users = format_names($users);
