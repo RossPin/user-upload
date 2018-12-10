@@ -15,4 +15,5 @@ if (array_key_exists('help',$options)) {
 if (validate_file($file)) $users = read_csv($file);
 $users = format_names($users);
 $users= check_emails($users);
+if ($dry_run) die("\nDry Run option set, exiting without writing ot the DB\n");
 ?>
