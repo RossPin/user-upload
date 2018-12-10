@@ -13,10 +13,17 @@ function help(){
 function read_csv($filename){
   $csv_file = fopen($filename, "r");
   $keys = fgetcsv($csv_file );
+  $keys = validate_csv_columns($keys);
+  $data = [];
   while ($row = fgetcsv($csv_file )) {
-      echo "$row[0], $row[1], $row[2]\n";
+    foreach($keys as $i=>$key) {
+      $user[$key] = $row[$i];
+    }
+    array_push($data, $user);
   }
   fclose($csv_file);
+  var_dump($data);
+  return $data;
 }
 
 function validate_file($filename){
@@ -25,5 +32,13 @@ function validate_file($filename){
   elseif ($info["extension"] != "csv") die("Provided file must be of type CSV.\n");
   elseif (!file_exists($filename)) die("File $filename not found.\n");
   else return true; //file valid if script not killed in above tests
+}
+
+function validate_csv_columns($keys){
+  foreach($keys as $i=>$key){
+    $keys[$i] = trim(strtolower($key));
+  }
+  if (in_array('name', $keys) && in_array('surname', $keys) && in_array('email', $keys)) return $keys;
+  else die("CSV must contain 'name', 'surname' and 'email' columns.\n");
 }
 ?>
