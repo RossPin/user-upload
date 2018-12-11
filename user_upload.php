@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
 require 'functions.php';
+require 'DB.php';
 $options = getopt ('u:p:h:', ['file:', 'create_table', 'dry_run', 'help']);
 $file = $options['file'] ?? null;
 $host = $options['h'] ?? null;
