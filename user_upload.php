@@ -11,7 +11,7 @@ if (array_key_exists('help',$options)) {
   help();
 }elseif (array_key_exists('create_table',$options)) {
   if ($host && $username) $conn = connect($host, $username, $password);
-  else die("\nHost and Username must be set with -h -u. see --help for details.\n");
+  else die("EXIT: Host and Username must be set with -h -u. see --help for details.\n");
   create_table($conn);
   $conn->close();
   die("Done\n");
@@ -19,9 +19,9 @@ if (array_key_exists('help',$options)) {
 if (validate_file($file)) $users = read_csv($file);
 $users = format_names($users);
 $users= check_emails($users);
-if ($dry_run) die("\nDry Run option set, exiting without writing to the DB\n");
+if ($dry_run) die("•Dry Run option set, completed without writing to DB\n");
 if ($host && $username) $conn = connect($host, $username, $password);
-else die("\nHost and Username must be set with -h -u. see --help for details.\n");
+else die("EXIT: Host and Username must be set with -h -u. see --help for details.\n");
 insert($users, $conn);
 $conn->close();
 die("Done\n");

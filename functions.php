@@ -28,9 +28,9 @@ function read_csv($filename){
 
 function validate_file($filename){
   $info = pathinfo($filename);
-  if (!$filename) die("\nNo --file option provided, use --help for details\n");
-  elseif ($info["extension"] != "csv") die("\nProvided file must be of type CSV.\n");
-  elseif (!file_exists($filename)) die("\nFile $filename not found.\n");
+  if (!$filename) die("EXIT: No --file option provided, use --help for details\n");
+  elseif ($info["extension"] != "csv") die("EXIT: Provided file must be of type CSV.\n");
+  elseif (!file_exists($filename)) die("EXIT: File $filename not found.\n");
   else return true; //file valid if script not killed in above tests
 }
 
@@ -39,7 +39,7 @@ function validate_csv_columns($keys){
     $keys[$i] = trim(strtolower($key));
   }
   if (in_array('name', $keys) && in_array('surname', $keys) && in_array('email', $keys)) return $keys;
-  else die("\nCSV must contain 'name', 'surname' and 'email' columns.\n");
+  else die("EXIT: CSV must contain 'name', 'surname' and 'email' columns.\n");
 }
 
 function format_names($users){
@@ -72,7 +72,7 @@ function sanitize_email($user) {
 function validate_email($user, $i){
   $line = $i+2;
   if (filter_var($user['email'], FILTER_VALIDATE_EMAIL) === false) {
-    echo "\n{$user['email']} is not valid email address. User {$user['name']} {$user['surname']} at CSV line $line will not be added to DB.\n";
+    echo "•{$user['email']} is not valid email address. User {$user['name']} {$user['surname']} at CSV line $line will not be added to DB.\n";
     return false;
   } else return true;
 }
