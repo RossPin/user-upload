@@ -24,7 +24,7 @@ function create_table($conn){
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
   name VARCHAR(30) NOT NULL,
   surname VARCHAR(30) NOT NULL,
-  email VARCHAR(50) NOT NULL
+  email VARCHAR(50) UNIQUE
   )";
   if (!$conn->query($sql)) die("EXIT: Error creating table: " . $conn->error . "\n");
   echo "• Table 'users' created successfully\n";
@@ -32,13 +32,14 @@ function create_table($conn){
 
 function insert($users, $conn){
   $count = 0;  
-  foreach($users as $user) {
+  foreach($users as $i=>$user) {
     // escape any ' in names or email for parsing in SQL
     $name = str_replace("'", "\'", $user['name']); 
     $surname = str_replace("'", "\'", $user['surname']);
     $email = str_replace("'", "\'", $user['email']);
+    $line = $i+2;
     $sql = "INSERT INTO users (name, surname, email) VALUES ('$name', '$surname', '$email')";
-    if (!$conn->query($sql)) echo "• Error entering $name $surname into DB: " . $conn->error . "\n";
+    if (!$conn->query($sql)) echo "• Error entering $name $surname at CSV line $line into DB: " . $conn->error . "\n";
     else $count++;    
   }
   echo "• $count users entered into DB successfully\n";
@@ -48,7 +49,7 @@ function check_users_exists($conn){
   if (!$conn->query("DESCRIBE users")) {
     $input = readline("• Table 'users' does not exist, would you like to create it now? (Y/N):");
     if (trim(strtolower($input)) == 'y') create_table($conn);
-    else die("EXIT: DB table users required to write to DB. this can be created with file directive --create_table\n");
+    else die("EXIT: DB table users required to write to DB. this can be created with --create_table\n");
   }
 }
 ?>
