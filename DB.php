@@ -22,11 +22,25 @@ function create_table($conn){
   // Create table
   $sql = "CREATE TABLE users (
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-  firstname VARCHAR(30) NOT NULL,
-  lastname VARCHAR(30) NOT NULL,
+  name VARCHAR(30) NOT NULL,
+  surname VARCHAR(30) NOT NULL,
   email VARCHAR(50) NOT NULL
   )";
   if (!$conn->query($sql)) die("\nError creating table: " . $conn->error . "\n");
   echo "Table users created successfully\n";
+}
+
+function insert($users, $conn){
+  $count = 0;  
+  foreach($users as $user) {
+    // escape any ' in names or email for parsing in SQL
+    $name = str_replace("'", "\'", $user['name']); 
+    $surname = str_replace("'", "\'", $user['surname']);
+    $email = str_replace("'", "\'", $user['email']);
+    $sql = "INSERT INTO users (name, surname, email) VALUES ('$name', '$surname', '$email')";
+    if (!$conn->query($sql)) echo "Error entering $name $surname into DB: " . $conn->error . "\n";
+    else $count++;    
+  }
+  echo "$count users entered into DB successfully\n";
 }
 ?>
