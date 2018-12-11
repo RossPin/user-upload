@@ -1,6 +1,6 @@
 <?php
 function help(){
-  echo "\nuser_upload.php can be used with the following options\n\n";
+  echo "user_upload.php can be used with the following options\n\n";
   echo "• --file [csv file name] – this is the name of the CSV to be parsed\n";
   echo "• --create_table – this will cause the MySQL users table to be built (and no further action will be taken)\n";
   echo "• --dry_run – this will be used with the --file directive to run the script but not insert into the DB. All other functions will be executed, but the database won't be altered\n";
@@ -71,7 +71,7 @@ function sanitize_email($user) {
 function validate_email($user, $i){
   $line = $i+2;
   if (filter_var($user['email'], FILTER_VALIDATE_EMAIL) === false) {
-    echo "•{$user['email']} is not valid email address. User {$user['name']} {$user['surname']} at CSV line $line will not be added to DB.\n";
+    echo "• {$user['email']} is not valid email address. User {$user['name']} {$user['surname']} at CSV line $line will not be added to DB.\n";
     return false;
   } else return true;
 }
