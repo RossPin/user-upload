@@ -12,7 +12,7 @@ function connect($host, $username, $password){
 
   // Connect to DB
   if (!$conn->select_db("user_upload")) die("EXIT: Error connecting to database: " . $conn->error . "\n"); 
-  echo "Connected to Database 'user_upload'\n";
+  echo "• Connected to Database 'user_upload'\n";
   return $conn;
 }
 
@@ -27,7 +27,7 @@ function create_table($conn){
   email VARCHAR(50) NOT NULL
   )";
   if (!$conn->query($sql)) die("EXIT: Error creating table: " . $conn->error . "\n");
-  echo "Table users created successfully\n";
+  echo "• Table 'users' created successfully\n";
 }
 
 function insert($users, $conn){
@@ -41,6 +41,13 @@ function insert($users, $conn){
     if (!$conn->query($sql)) echo "• Error entering $name $surname into DB: " . $conn->error . "\n";
     else $count++;    
   }
-  echo "$count users entered into DB successfully\n";
+  echo "• $count users entered into DB successfully\n";
+}
+
+function check_users_exists($conn){
+  if (!$conn->query("DESCRIBE users")) {
+    echo "• Table 'users' does not exist, creating table now.\n";
+    create_table($conn);
+  }
 }
 ?>
