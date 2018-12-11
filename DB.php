@@ -46,8 +46,9 @@ function insert($users, $conn){
 
 function check_users_exists($conn){
   if (!$conn->query("DESCRIBE users")) {
-    echo "• Table 'users' does not exist, creating table now.\n";
-    create_table($conn);
+    $input = readline("• Table 'users' does not exist, would you like to create it now? (Y/N):");
+    if (trim(strtolower($input)) == 'y') create_table($conn);
+    else die("EXIT: DB table users required to write to DB. this can be created with file directive --create_table\n");
   }
 }
 ?>
