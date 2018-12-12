@@ -35,11 +35,13 @@ function validate_file($filename){
 }
 
 function validate_csv_columns($keys){
-  foreach($keys as $i=>$key){
-    $keys[$i] = trim(strtolower($key));
+  if ($keys) {
+    foreach($keys as $i=>$key){
+      $keys[$i] = trim(strtolower($key));
+    }
+    if (in_array('name', $keys) && in_array('surname', $keys) && in_array('email', $keys)) return $keys;
   }
-  if (in_array('name', $keys) && in_array('surname', $keys) && in_array('email', $keys)) return $keys;
-  else die("EXIT: CSV must contain 'name', 'surname' and 'email' columns.\n");
+  die("EXIT: CSV must contain 'name', 'surname' and 'email' columns.\n");
 }
 
 function format_names($users){
