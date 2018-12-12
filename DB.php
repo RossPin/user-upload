@@ -1,17 +1,21 @@
 <?php
 function connect($host, $username, $password){
   // Create connection
+  error_reporting(E_ERROR);
   $conn = new mysqli($host, $username, $password);
+  error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
   // Check connection
-  if ($conn->connect_error) die("EXIT: Connection to DB failed, " . ($password ? 'Check -h -u -p fields: ' : 'Supply password with -p if required: ') . $conn->connect_error . "\n");
-
+  if ($conn->connect_error) {
+    $message = stristr($conn->connect_error, "Access denied") ? 'Access denied check your credentials' : 'Could not connect to server';
+    die("EXIT: Connection to MySQL server failed, $message\n");
+  }
   // Create database if doesn't exist
   $sql = "CREATE DATABASE IF NOT EXISTS user_upload";
-  if (!$conn->query($sql)) die("EXIT: Error creating database: " . $conn->error . "\n");
+  if (!$conn->query($sql)) die("EXIT: Error creating database 'user_upload': check user permissions.\n");
 
   // Connect to DB
-  if (!$conn->select_db("user_upload")) die("EXIT: Error connecting to database: " . $conn->error . "\n"); 
+  if (!$conn->select_db("user_upload")) die("EXIT: Error connecting to database 'user_upload': check user permissions.\n"); 
   echo "• Connected to Database 'user_upload'\n";
   return $conn;
 }
@@ -26,7 +30,7 @@ function create_table($conn){
   surname VARCHAR(30) NOT NULL,
   email VARCHAR(50) UNIQUE
   )";
-  if (!$conn->query($sql)) die("EXIT: Error creating table: " . $conn->error . "\n");
+  if (!$conn->query($sql)) die("EXIT: Error creating table 'users': check user permissions.\n");
   echo "• Table 'users' created successfully\n";
 }
 
@@ -38,7 +42,10 @@ function insert($users, $conn){
     $surname = str_replace("'", "\'", $user['surname']);
     $email = str_replace("'", "\'", $user['email']);    
     $sql = "INSERT INTO users (name, surname, email) VALUES ('$name', '$surname', '$email')";
-    if (!$conn->query($sql)) echo "• Error entering $name $surname from CSV line {$user['line']} into DB: " . $conn->error . "\n";
+    if (!$conn->query($sql)){
+      $message = stristr($conn->error, "Duplicate entry") ? "Email $email already in DB" : "check input data";
+      echo "• Error entering {$user['name']} {$user['surname']} from CSV line {$user['line']} into DB: $message\n";
+    } 
     else $count++;    
   }
   echo "• $count users entered into DB successfully\n";
