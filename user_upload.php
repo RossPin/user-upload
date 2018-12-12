@@ -3,7 +3,6 @@
 require 'functions.php';
 require 'DB.php';
 $options = getopt ('u:p:h:', ['file:', 'create_table', 'dry_run', 'help']);
-$file = $options['file'] ?? null;
 $host = $options['h'] ?? null;
 $username = $options['u'] ?? null;
 $password = $options['p'] ?? null;
@@ -18,6 +17,7 @@ if (array_key_exists('help',$options)) {
   $conn->close();
   die("Done\n");
 }
+$file = $options['file'] ?? readline("Enter filename of CSV to be read:");
 if (validate_file($file)) $users = read_csv($file);
 $users = format_names($users);
 $users= check_emails($users);
