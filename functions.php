@@ -81,9 +81,9 @@ function validate_email($user){
 
 function set_DB_config($options){
   return [
-  'host' => $options['h'] ?? readline("Enter MySQL host:"),
-  'username' => $options['u'] ?? readline("Enter MySQL username:"),
-  'password' => $options['p'] ?? readline_hidden("Enter MySQL password:")
+  'host' => $options['h'] ?? trim(readline("Enter MySQL host:")),
+  'username' => $options['u'] ?? trim(readline("Enter MySQL username:")),
+  'password' => $options['p'] ?? trim(readline_hidden("Enter MySQL password:"))
   ];
 }
 
