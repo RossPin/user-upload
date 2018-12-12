@@ -83,7 +83,16 @@ function set_DB_config($options){
   return [
   'host' => $options['h'] ?? readline("Enter MySQL host:"),
   'username' => $options['u'] ?? readline("Enter MySQL username:"),
-  'password' => $options['p'] ?? readline("Enter MySQL password:")
+  'password' => $options['p'] ?? readline_hidden("Enter MySQL password:")
   ];
+}
+
+function readline_hidden( $prompt = '' )
+{
+  echo $prompt;
+  echo "\033[30;40m";
+  $input = readline();
+  echo "\033[0m";
+  return $input;
 }
 ?>
