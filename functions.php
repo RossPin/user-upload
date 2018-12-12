@@ -50,11 +50,15 @@ function format_names($users){
   },$users);
 }
 
-function format_name($name){
-  $name = preg_replace("/[^\w']+/", "", strtolower($name)); //set to lowercase and remove non alpa characters except '
-  $name = trim(str_replace("'", " ", $name)); // swap ' for space to teat as seperate words
-  $name = ucwords($name); //capitalise words
-  $name = str_replace(" ", "'", $name); // swap space back for '
+function format_name($name){  
+  $name = trim(preg_replace("/[^\w'-]+/", "", strtolower($name))); //set to lowercase and remove non alpa characters except for allowed special characters (' and -)
+  foreach (["'" , "-"] as $char){
+    $words = explode($char, $name); // split name into words divided by special charcter
+    foreach ($words as $i=>$word) {
+      $words[$i] = ucwords($word); //capitalise words
+    }
+    $name = implode($char, $words); // join words back into name
+  }   
   return $name;
 }
 
