@@ -58,19 +58,17 @@ function format_name($name){
 }
 
 function check_emails($users){
-  $users = array_map('sanitize_email', $users);
-  $users = array_filter($users, 'validate_email', ARRAY_FILTER_USE_BOTH);
-  return array_merge($users);
+  //returns array of users with emails formated and entries with invalid emails removed
+  return array_reduce($users, function($acc, $user){
+    $user['email'] = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
+    if (validate_email($user, count($acc)+2)) array_push($acc, $user);
+    return $acc;
+  }, []);
 }
 
-function sanitize_email($user) {
-  $user['email'] = filter_var($user['email'], FILTER_SANITIZE_EMAIL); 
-  return $user;
-}
-
-function validate_email($user, $i){
-  $line = $i+2;
+function validate_email($user, $line){  
   if (filter_var($user['email'], FILTER_VALIDATE_EMAIL) === false) {
+    //output message if invalid email
     echo "• {$user['email']} is not valid email address. User {$user['name']} {$user['surname']} at CSV line $line will not be added to DB.\n";
     return false;
   } else return true;
