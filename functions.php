@@ -19,6 +19,7 @@ function read_csv($filename){
     foreach($keys as $i=>$key) {
       $user[$key] = $row[$i];
     }
+    $user['line'] = count($users)+2; //record line from CSV for error messages
     array_push($users, $user);
   }
   fclose($csv_file);  
@@ -61,15 +62,15 @@ function check_emails($users){
   //returns array of users with emails formated and entries with invalid emails removed
   return array_reduce($users, function($acc, $user){
     $user['email'] = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
-    if (validate_email($user, count($acc)+2)) array_push($acc, $user);
+    if (validate_email($user)) array_push($acc, $user);
     return $acc;
   }, []);
 }
 
-function validate_email($user, $line){  
+function validate_email($user){  
   if (filter_var($user['email'], FILTER_VALIDATE_EMAIL) === false) {
     //output message if invalid email
-    echo "• {$user['email']} is not valid email address. User {$user['name']} {$user['surname']} at CSV line $line will not be added to DB.\n";
+    echo "• {$user['email']} is not valid email address. User {$user['name']} {$user['surname']} at CSV line {$user['line']} will not be added to DB.\n";
     return false;
   } else return true;
 }
