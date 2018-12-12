@@ -19,7 +19,7 @@ $file = $options['file'] ?? readline("Enter filename of CSV to be read:");
 if (validate_file($file)) $users = read_csv($file);
 $users = format_names($users);
 $users= check_emails($users);
-if ($dry_run) die("•Dry Run option set, completed without writing to DB\n");
+if ($dry_run) die("• Dry Run option set, completed without writing to DB\n");
 $DB_config = set_DB_config($options);
 if ($DB_config['host'] && $DB_config['username']) $conn = connect($DB_config['host'], $DB_config['username'], $DB_config['password']);
 else die("EXIT: Host and Username must be set to connect to the DB. see --help for details.\n");
