@@ -1,4 +1,4 @@
-##Details
+## Details
 
 PHP script to parse a csv file of users and add to mySQL database.
 
@@ -19,7 +19,7 @@ MySQL server credentials can be provided via -h, -u and -p directives for connec
 
 User will be prompted to provide File and MySQL credentials if required and not set by directives.
 
-##Directives
+## Directives
 
 • --file [csv file name] – the name of the CSV to be parsed
 • --create_table – this will cause the MySQL users table to be built (and no further action will be taken)
