@@ -32,14 +32,13 @@ function create_table($conn){
 
 function insert($users, $conn){
   $count = 0;  
-  foreach($users as $i=>$user) {
+  foreach($users as $user) {
     // escape any ' in names or email for parsing in SQL
     $name = str_replace("'", "\'", $user['name']); 
     $surname = str_replace("'", "\'", $user['surname']);
-    $email = str_replace("'", "\'", $user['email']);
-    $line = $i+2;
+    $email = str_replace("'", "\'", $user['email']);    
     $sql = "INSERT INTO users (name, surname, email) VALUES ('$name', '$surname', '$email')";
-    if (!$conn->query($sql)) echo "• Error entering $name $surname at CSV line $line into DB: " . $conn->error . "\n";
+    if (!$conn->query($sql)) echo "• Error entering $name $surname from CSV line {$user['line']} into DB: " . $conn->error . "\n";
     else $count++;    
   }
   echo "• $count users entered into DB successfully\n";
